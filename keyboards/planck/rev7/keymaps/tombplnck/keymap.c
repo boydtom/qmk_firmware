@@ -74,16 +74,36 @@ const custom_shift_key_t custom_shift_keys[] = {
 layer_state_t layer_state_set_user(layer_state_t state) {
     return update_tri_layer_state(state, 1, 2, 5);
 
-    static bool is_adjust_layer_on = false;
-  if (layer_state_cmp(state, 4) != is_adjust_layer_on) {
-    is_adjust_layer_on = layer_state_cmp(state, 4);
-    if (is_adjust_layer_on) {
-      PLAY_SONG(cp2077_v); // Replace my_song with your desired song
-    } else {
-      stop_all_notes();
+        switch (get_highest_layer(state)) {
+    case 1:
+        rgblight_setrgb (0x00,  0x00, 0xFF);
+        break;
+    case 2:
+        rgblight_setrgb (0xFF,  0x00, 0x00);
+        break;
+    case 5:
+        rgblight_setrgb (0x7A,  0x00, 0xFF);
+        break;
+    default: //  for any other layers, or the default layer
+        rgblight_setrgb (0x00,  0xFF, 0xFF);
+        break;
     }
-  }
   return state;
+}
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    static bool is_layer_4_active = false;
+
+    // Check if layer 2 is activated or deactivated
+    if (layer_state_cmp(layer_state, 4) != is_layer_4_active) {
+        is_layer_4_active = layer_state_cmp(layer_state, 4);
+        if (is_layer_4_active) {
+            PLAY_SONG(cp2077_v); // Play the song when layer 2 is activated
+        } else {
+            // Optionally stop the sound or play another sound when the layer is deactivated
+        }
+    }
+
+    return true; // Important: Return true to allow other key processing
 }
 
 /*layer_state_t layer_state_set_user(layer_state_t state) {
