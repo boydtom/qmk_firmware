@@ -27,7 +27,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
           KC_TRNS,  KC_1,         KC_2,     KC_3,     KC_4,     KC_5,     KC_6,     KC_7,     KC_8,     KC_9,     KC_0,     KC_DEL,
           KC_TRNS,  KC_TRNS,      KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_LEFT,  KC_DOWN,  KC_UP,    KC_RGHT,  KC_TRNS,  KC_TRNS,
           KC_TRNS,  KC_TRNS,      KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_HOME,  KC_PGDN,  KC_PGUP,  KC_END,   KC_BSLS,  KC_TRNS,
-          MO(1),  LCA(KC_DEL),  KC_LGUI,  KC_LALT,  KC_LSFT,                              KC_ENT,   KC_TRNS,  KC_TRNS,  KC_TRNS,  MO(2)
+          MO(1),  LCA(KC_DEL),  KC_LGUI,  KC_LALT,  KC_LSFT,                              KC_ENT,   TO(4),  KC_TRNS,  KC_TRNS,  MO(2)
     ),
       /* MO2 Symbols, Numbers */
     [2] = LAYOUT_planck_2x2u(
@@ -71,51 +71,33 @@ const custom_shift_key_t custom_shift_keys[] = {
   {KC_LBRC ,  KC_RBRC}, // Shift [ is ]
 };
 
-layer_state_t layer_state_set_user(layer_state_t state) {
-    return update_tri_layer_state(state, 1, 2, 5);
-
-        switch (get_highest_layer(state)) {
-    case 1:
-        rgblight_setrgb (0x00,  0x00, 0xFF);
-        break;
-    case 2:
-        rgblight_setrgb (0xFF,  0x00, 0x00);
-        break;
-    case 5:
-        rgblight_setrgb (0x7A,  0x00, 0xFF);
-        break;
-    default: //  for any other layers, or the default layer
-        rgblight_setrgb (0x00,  0xFF, 0xFF);
-        break;
-    }
-  return state;
-}
-bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-    static bool is_layer_4_active = false;
-
-    // Check if layer 2 is activated or deactivated
-    if (layer_state_cmp(layer_state, 4) != is_layer_4_active) {
-        is_layer_4_active = layer_state_cmp(layer_state, 4);
-        if (is_layer_4_active) {
-            PLAY_SONG(cp2077_v); // Play the song when layer 2 is activated
-        } else {
-            // Optionally stop the sound or play another sound when the layer is deactivated
-        }
-    }
-
-    return true; // Important: Return true to allow other key processing
-}
-
 /*layer_state_t layer_state_set_user(layer_state_t state) {
-*    static bool is_this_layer_on = false;
-*    if (layer_state_cmp(state, 0) != is_this_layer_on) { // Check if layer 3 is activated/deactivated
-*        is_this_layer_on = layer_state_cmp(state, 0);
-*        if (is_this_layer_on) {
-*            PLAY_SONG(QWERTY_SOUND); // Play the song when layer 3 is activated
-*        } else {
-*            stop_all_notes(); // Stop the sound when layer 3 is deactivated
-*        }
+*    switch (get_highest_layer(state)) {
+*        case 4:
+*            rgblight_setrgb(0xFF, 0x00, 0x00); // Red
+*            PLAY_SONG(cp2077_v);
+*            break;
+*        default:
+*            // Default layer or other layers
+*            rgblight_setrgb(0x00, 0xFF, 0xFF); // Cyan
+*            break;
 *    }
 *    return state;
+*    update_tri_layer_state(state, 1, 2, 5);
 *}
- */
+*/
+    layer_state_t layer_state_set_user(layer_state_t state) {
+        static bool is_this_layer_on = false;
+        if (layer_state_cmp(state, 4) != is_this_layer_on) {
+            is_this_layer_on = layer_state_cmp(state, 4);
+            if (is_this_layer_on) {
+                audio_set_tempo(90);
+                PLAY_SONG(cp2077_v);
+            } else {
+                // Optional:  Stop the song or play another song
+                stop_all_notes();
+            }
+        }
+        return state;
+    }
+
