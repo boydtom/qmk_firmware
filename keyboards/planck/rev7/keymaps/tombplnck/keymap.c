@@ -48,7 +48,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_SYM] = LAYOUT_planck_2x2u(
           KC_TRNS,  KC_EXLM,  KC_AT,    KC_HASH,  KC_DLR,   KC_PERC,  KC_CIRC,  KC_AMPR,  KC_ASTR,  KC_LPRN,  KC_RPRN,  KC_TRNS,
           KC_TRNS,  KC_LCBR,  KC_RCBR,  KC_UNDS,  KC_PIPE,  KC_LT,    KC_GT,    KC_SLSH,  KC_MINS,  KC_LBRC,  KC_RBRC,  KC_TRNS,
-          KC_TRNS,  KC_TRNS,  KC_DOT,   KC_PPLS,  KC_LPRN,  KC_SCLN,  KC_COLN,  KC_RPRN,  KC_PMNS,  KC_PEQL,  KC_TRNS,  KC_TRNS,
+          KC_TRNS,  KC_TRNS,  KC_DOT,   KC_PPLS,  KC_LPRN,  KC_SCLN,  KC_COLN,  KC_RPRN,  KC_PMNS,  KC_EQL,  KC_TRNS,  KC_TRNS,
           NAV,    KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_LSFT,  KC_ENT,   KC_TRNS,  KC_TRNS,  KC_TRNS,   SYM
     ),
     [_CS2] = LAYOUT_planck_2x2u(
@@ -61,14 +61,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       /* CyberPunk 2077 */
     [_CP77] = LAYOUT_planck_2x2u(
           KC_ESC,  KC_NO,  KC_1,     KC_2,  KC_3,    KC_4,  KC_5,   KC_6,   KC_NO,  KC_NO,  KC_NO,    BASE,
-          KC_NO,   KC_G,   KC_LCTL,  KC_Q,  KC_W,    KC_E,  KC_R,   KC_T,    CS2, CP77,  KC_NO,  _______,
+          KC_NO,   KC_G,   KC_LCTL,  KC_Q,  KC_W,    KC_E,  KC_R,   KC_T,    KC_Y,   KC_U,   KC_I,   KC_O,
           KC_NO,   KC_B,   KC_LSFT,  KC_A,  KC_S,    KC_D,  KC_R,   KC_NO,  KC_NO,  KC_NO,  KC_NO,    KC_NO,
           NAV,   KC_NO,  KC_Z,     KC_X,  KC_SPC,                         KC_C,   KC_NO,  KC_NO,  KC_NO, SYM
      ),
       /* Settings */
     [_ADJUST] = LAYOUT_planck_2x2u(
           _______, QK_BOOT, DB_TOGG, UG_TOGG, UG_NEXT, UG_HUEU, UG_HUED, UG_SATU, UG_SATD, UG_SPDU, UG_SPDD, KC_DEL ,
-          _______, EE_CLR,  MU_NEXT, AU_ON,   AU_OFF,  AG_NORM, AG_SWAP, BASE,  CS2, CP77,  KC_NO,  _______,
+          _______, EE_CLR,  MU_NEXT, AU_ON,   AU_OFF,  AG_NORM, AG_SWAP, BASE,  CS2, TO(CP77),  KC_NO,  _______,
           _______, AU_PREV, AU_NEXT, MU_ON,   MU_OFF,  MI_ON,   MI_OFF,  _______, _______, _______, _______, _______,
           NAV,   KC_NO,  KC_NO,     KC_NO,  KC_NO,                     KC_NO,   KC_NO,  KC_NO,  KC_NO, SYM
      )
@@ -123,18 +123,13 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         layer_move(_CS2);
       }
       return false;
-    case CP77:
+    case TO(_CP77):
       if (record->event.pressed) {
         #ifdef AUDIO_ENABLE
-          stop_all_notes();
           PLAY_SONG(cp_song);
         #endif
-        layer_off(_NAV);
-        layer_off(_SYM);
-        layer_off(_ADJUST);
-        layer_on(_CP77);
+      } else {
       }
-      return false;
       break;
     }
   return true;
