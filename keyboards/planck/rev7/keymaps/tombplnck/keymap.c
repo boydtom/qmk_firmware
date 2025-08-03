@@ -1,11 +1,9 @@
-#include <complex.h>
 #include "action_layer.h"
+#include "config.h"
+#include "custom_shift_keys.h"
 #include "keycodes.h"
 #include "quantum_keycodes.h"
 #include QMK_KEYBOARD_H
-#if __has_include("keymap.h")
-#    include "keymap.h"
-#endif
 #include "user_song_list.h"
 
 enum planck_layers {
@@ -63,7 +61,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       /* CyberPunk 2077 */
     [_CP77] = LAYOUT_planck_2x2u(
           KC_ESC,  KC_NO,  KC_1,     KC_2,  KC_3,    KC_4,  KC_5,   KC_6,   KC_NO,  KC_NO,  KC_NO,    BASE,
-          KC_NO,   KC_G,   KC_LCTL,  KC_Q,  KC_W,    KC_E,  KC_R,   KC_T,   KC_NO,  KC_NO,  KC_NO,    KC_NO,
+          KC_NO,   KC_G,   KC_LCTL,  KC_Q,  KC_W,    KC_E,  KC_R,   KC_T,    CS2, CP77,  KC_NO,  _______,
           KC_NO,   KC_B,   KC_LSFT,  KC_A,  KC_S,    KC_D,  KC_R,   KC_NO,  KC_NO,  KC_NO,  KC_NO,    KC_NO,
           NAV,   KC_NO,  KC_Z,     KC_X,  KC_SPC,                         KC_C,   KC_NO,  KC_NO,  KC_NO, SYM
      ),
@@ -87,7 +85,7 @@ const custom_shift_key_t custom_shift_keys[] = {
 float tone_startup[][2]    = SONG(STARTUP_SOUND);
 float tone_qwerty[][2]     = SONG(QWERTY_SOUND);
 float tone_goodbye[][2] = SONG(GOODBYE_SOUND);
-float cp2077_v[][2]    = SONG(CP2077_V);
+float cp_song[][2]    = SONG(CP2077_SOUND);
 #endif
 
 
@@ -128,13 +126,17 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     case CP77:
       if (record->event.pressed) {
         #ifdef AUDIO_ENABLE
-          PLAY_SONG(cp2077_v);
+          stop_all_notes();
+          PLAY_SONG(cp_song);
         #endif
-        layer_move(_CP77);
+        layer_off(_NAV);
+        layer_off(_SYM);
+        layer_off(_ADJUST);
+        layer_on(_CP77);
       }
       return false;
-      }
+      break;
+    }
   return true;
   }
-
 

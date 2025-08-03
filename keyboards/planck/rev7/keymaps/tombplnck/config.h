@@ -22,6 +22,7 @@
 
 #    define DEFAULT_LAYER_SONGS \
         { SONG(QWERTY_SOUND) }
+
 #endif
 
 /*
