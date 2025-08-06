@@ -1,9 +1,9 @@
+#include QMK_KEYBOARD_H
 #include "action_layer.h"
 #include "config.h"
 #include "custom_shift_keys.h"
 #include "keycodes.h"
 #include "quantum_keycodes.h"
-#include QMK_KEYBOARD_H
 #include "user_song_list.h"
 
 enum planck_layers {
@@ -68,7 +68,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       /* Settings */
     [_ADJUST] = LAYOUT_planck_2x2u(
           _______, QK_BOOT, DB_TOGG, UG_TOGG, UG_NEXT, UG_HUEU, UG_HUED, UG_SATU, UG_SATD, UG_SPDU, UG_SPDD, KC_DEL ,
-          _______, EE_CLR,  MU_NEXT, AU_ON,   AU_OFF,  AG_NORM, AG_SWAP, BASE,  CS2, TO(CP77),  KC_NO,  _______,
+          _______, EE_CLR,  MU_NEXT, AU_ON,   AU_OFF,  AG_NORM, AG_SWAP, BASE,  CS2, TO(_CP77),  KC_NO,  _______,
           _______, AU_PREV, AU_NEXT, MU_ON,   MU_OFF,  MI_ON,   MI_OFF,  _______, _______, _______, _______, _______,
           NAV,   KC_NO,  KC_NO,     KC_NO,  KC_NO,                     KC_NO,   KC_NO,  KC_NO,  KC_NO, SYM
      )
