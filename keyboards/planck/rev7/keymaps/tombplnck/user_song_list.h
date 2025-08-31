@@ -3,4 +3,4 @@
     S__NOTE(_REST), S__NOTE(_GS3), S__NOTE(_GS3), S__NOTE(_GS3), S__NOTE(_GS3), S__NOTE(_A3), S__NOTE(_A3), \
     S__NOTE(_A3), S__NOTE(_A3), S__NOTE(_A2), S__NOTE(_A2), S__NOTE(_A2), S__NOTE(_REST), S__NOTE(_REST),   \
     S__NOTE(_A2), S__NOTE(_REST), S__NOTE(_GS3), S__NOTE(_GS3), S__NOTE(_GS3), S__NOTE(_GS3), S__NOTE(_A3), \
-    S__NOTE(_A3), S__NOTE(_A3), S__NOTE(_A3),
+    S__NOTE(_A3), S__NOTE(_A3), S__NOTE(_A3)

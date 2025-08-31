@@ -1,3 +1,4 @@
+#include "audio.h"
 #include QMK_KEYBOARD_H
 #include "action_layer.h"
 #include "config.h"
@@ -10,17 +11,17 @@ enum planck_layers {
     _BASE,
     _NAV,
     _SYM,
-    _CS2,
-    _CP77,
     _ADJUST,
+    _CP77,
+    _CS2,
 };
 enum planck_keycodes {
     BASE = SAFE_RANGE,
     NAV,
     SYM,
-    CS2,
-    CP77,
     ADJUST,
+    CP77,
+    CS2,
 };
 /* THIS FILE WAS GENERATED!
  *
@@ -51,27 +52,27 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
           KC_TRNS,  KC_TRNS,  KC_DOT,   KC_PPLS,  KC_LPRN,  KC_SCLN,  KC_COLN,  KC_RPRN,  KC_PMNS,  KC_EQL,  KC_TRNS,  KC_TRNS,
           NAV,    KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_LSFT,  KC_ENT,   KC_TRNS,  KC_TRNS,  KC_TRNS,   SYM
     ),
-    [_CS2] = LAYOUT_planck_2x2u(
-      /* CS2 */
-          KC_ESC,  KC_NO,  QK_GESC,  KC_1,  KC_2,    KC_3,  KC_4,   KC_NO,  KC_NO,  KC_NO,  KC_NO,  BASE,
-          KC_NO,   KC_G,   KC_LCTL,  KC_Q,  KC_W,    KC_E,  KC_R,   KC_T,   KC_Y,   KC_U,   KC_I,   KC_O,
-          KC_NO,   KC_B,   KC_LSFT,  KC_A,  KC_S,    KC_D,  KC_F,   KC_G,   KC_H,   KC_J,   KC_K,   KC_NO,
-          NAV,   KC_NO,  KC_Z,     KC_X,  KC_SPC,  KC_C,  KC_NO,  KC_NO,  KC_NO,   SYM
-    ),
+      /* Settings */
+    [_ADJUST] = LAYOUT_planck_2x2u(
+          _______, QK_BOOT, DB_TOGG, UG_TOGG, UG_NEXT, UG_HUEU, UG_HUED, UG_SATU, UG_SATD, UG_SPDU, UG_SPDD, KC_DEL ,
+          _______, EE_CLR,  MU_NEXT, AU_ON,   AU_OFF,  AG_NORM, AG_SWAP, _______,  _______, _______,   KC_NO,  _______,
+          _______, AU_PREV, AU_NEXT, MU_ON,   MU_OFF,  MI_ON,   MI_OFF,  _______, _______, CS2, TO(_CP77),  BASE,
+          NAV,   KC_NO,  KC_NO,     KC_NO,  KC_NO,                     KC_NO,   KC_NO,  KC_NO,  KC_NO, SYM
+     ),
       /* CyberPunk 2077 */
     [_CP77] = LAYOUT_planck_2x2u(
           KC_ESC,  KC_NO,  KC_1,     KC_2,  KC_3,    KC_4,  KC_5,   KC_6,   KC_NO,  KC_NO,  KC_NO,    BASE,
           KC_NO,   KC_G,   KC_LCTL,  KC_Q,  KC_W,    KC_E,  KC_R,   KC_T,    KC_Y,   KC_U,   KC_I,   KC_O,
-          KC_NO,   KC_B,   KC_LSFT,  KC_A,  KC_S,    KC_D,  KC_R,   KC_NO,  KC_NO,  KC_NO,  KC_NO,    KC_NO,
+          KC_NO,   KC_B,   KC_LSFT,  KC_A,  KC_S,    KC_D,  KC_R,   KC_NO,  KC_NO,  KC_NO, KC_TRNS, KC_TRNS,
           NAV,   KC_NO,  KC_Z,     KC_X,  KC_SPC,                         KC_C,   KC_NO,  KC_NO,  KC_NO, SYM
      ),
-      /* Settings */
-    [_ADJUST] = LAYOUT_planck_2x2u(
-          _______, QK_BOOT, DB_TOGG, UG_TOGG, UG_NEXT, UG_HUEU, UG_HUED, UG_SATU, UG_SATD, UG_SPDU, UG_SPDD, KC_DEL ,
-          _______, EE_CLR,  MU_NEXT, AU_ON,   AU_OFF,  AG_NORM, AG_SWAP, BASE,  CS2, TO(_CP77),  KC_NO,  _______,
-          _______, AU_PREV, AU_NEXT, MU_ON,   MU_OFF,  MI_ON,   MI_OFF,  _______, _______, _______, _______, _______,
-          NAV,   KC_NO,  KC_NO,     KC_NO,  KC_NO,                     KC_NO,   KC_NO,  KC_NO,  KC_NO, SYM
-     )
+    [_CS2] = LAYOUT_planck_2x2u(
+      /* CS2 */
+          KC_ESC,  KC_NO,  QK_GESC,  KC_1,  KC_2,    KC_3,  KC_4,   KC_NO,  KC_NO,  KC_NO,  KC_NO,  BASE,
+          KC_NO,   KC_G,   KC_LCTL,  KC_Q,  KC_W,    KC_E,  KC_R,   KC_T,   KC_Y,   KC_U,   KC_I,   KC_O,
+          KC_NO,   KC_B,   KC_LSFT,  KC_A,  KC_S,    KC_D,  KC_F,   KC_G,   KC_H,   KC_J,   KC_K,   KC_TRNS,
+          NAV,   KC_NO,  KC_Z,     KC_X,  KC_SPC,  KC_C,  KC_NO,  KC_NO,  KC_NO,   SYM
+    )
 };
 
 
@@ -123,15 +124,18 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         layer_move(_CS2);
       }
       return false;
-    case TO(_CP77):
-      if (record->event.pressed) {
-        #ifdef AUDIO_ENABLE
-          PLAY_SONG(cp_song);
-        #endif
-      } else {
-      }
-      break;
     }
   return true;
-  }
+}
 
+
+layer_state_t layer_state_set_user(layer_state_t state) {
+    switch (get_highest_layer(state)) {
+    case _CP77:
+        PLAY_SONG(cp_song);
+        break;
+    default: //  for any other layers, or the default layer
+        break;
+    }
+  return state;
+}
