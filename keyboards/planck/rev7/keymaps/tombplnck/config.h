@@ -17,7 +17,7 @@
 #pragma once
 
 #define MUSIC_MAP
-#undef AUDIO_VOICES
+#define  AUDIO_VOICES
 #undef AUDIO_PIN
 #define AUDIO_PIN A5
 #define AUDIO_PIN_ALT A4
