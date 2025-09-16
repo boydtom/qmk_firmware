@@ -1,10 +1,6 @@
-#include QMK_KEYBOARD_H
-#include "audio.h"
-#include "action_layer.h"
-#include "config.h"
-#include "custom_shift_keys.h"
 #include "keycodes.h"
-#include "quantum_keycodes.h"
+#include QMK_KEYBOARD_H
+#include "custom_shift_keys.h"
 #include "user_song_list.h"
 
 enum planck_layers {
@@ -20,10 +16,10 @@ enum planck_keycodes {
     NAV,
     SYM,
     ADJUST,
+    CP77,
+    CS2,
 };
 
-#define CP77 TO(_CP77)
-#define CS2 TO(_CS2)
 
 float tone_startup[][2]    = SONG(STARTUP_SOUND);
 float tone_qwerty[][2]     = SONG(QWERTY_SOUND);
@@ -63,10 +59,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      ),
       /* CyberPunk 2077 */
     [_CP77] = LAYOUT_planck_2x2u(
-          KC_ESC,  KC_NO,    QK_GESC,  KC_2,  KC_3,    KC_4,  KC_5,   KC_6,   KC_NO,  KC_NO,  KC_NO,    BASE,
+          KC_ESC,  QK_GESC,  KC_TAB, KC_1,     KC_2,  KC_3,    KC_4,  KC_5,   KC_6,     KC_NO,  KC_NO,    BASE,
           KC_NO,   KC_G,     KC_B,     KC_Q,  KC_W,    KC_E,  KC_R,   KC_T,    KC_Y,   KC_U,   KC_I,   KC_O,
-          KC_NO,   KC_LCTL,  KC_Z,     KC_A,  KC_S,    KC_D,  KC_R,   KC_NO,  KC_NO,  KC_NO, KC_TRNS, KC_TRNS,
-          NAV,     KC_LSFT,  KC_NO,    KC_X,  KC_SPC,                         KC_C,   KC_NO,  KC_NO,  KC_NO, SYM
+          KC_NO,   KC_LSFT,  KC_Z,  KC_A,  KC_S,    KC_D,  KC_F,   KC_NO,  KC_NO,  KC_NO, KC_TRNS, KC_TRNS,
+          NAV,     KC_LCTL,  KC_X,  KC_Y,  KC_SPC,                           KC_C,  KC_P,  KC_NO,  KC_NO, SYM
      ),
     [_CS2] = LAYOUT_planck_2x2u(
       /* CS2 */
@@ -85,6 +81,71 @@ const custom_shift_key_t custom_shift_keys[] = {
 };
 
 
+layer_state_t layer_state_set_user(layer_state_t state) {
+    switch (get_highest_layer(state)) {
+    case _NAV:
+        rgblight_setrgb (0x00,  0x00, 0xFF);
+        break;
+    case _SYM:
+        rgblight_setrgb (0xFF,  0x00, 0x00);
+        break;
+    case _CP77:
+        #ifdef AUDIO_ENABLE
+        #endif
+        rgblight_setrgb (0x00,  0xFF, 0x00);
+        break;
+    case _CS2:
+        rgblight_setrgb (0x7A,  0x00, 0xFF);
+        break;
+    case _ADJUST:
+        rgblight_setrgb (0x7A,  0x00, 0xFF);
+        break;
+    default: //  for any other layers, or the default layer
+        rgblight_setrgb (0x00,  0xFF, 0xFF);
+        break;
+    }
+  return state;
+}
+
+
+
+/*bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+* switch (keycode) {
+*   case BASE:
+*     if (record->event.pressed) {
+*       layer_move(_BASE);
+*       #ifdef AUDIO_ENABLE
+*         PLAY_SONG(tone_qwerty);
+*       #endif
+*     }
+*     break;
+*   case NAV:
+*     if (record->event.pressed) {
+*       layer_on(_NAV);
+*       update_tri_layer(_NAV, _SYM, _ADJUST);
+*     } else {
+*       layer_off(_NAV);
+*       update_tri_layer(_NAV, _SYM, _ADJUST);
+*     }
+*     break;
+*   case SYM:
+*     if (record->event.pressed) {
+*       layer_on(_SYM);
+*       update_tri_layer(_NAV, _SYM, _ADJUST);
+*     } else {
+*       layer_off(_SYM);
+*       update_tri_layer(_NAV, _SYM, _ADJUST);
+*     }
+*     break;
+*   default:
+*     return true;
+* }
+* return true;
+*}
+*
+*
+*/
+
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
@@ -95,7 +156,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
           PLAY_SONG(tone_qwerty);
         #endif
       }
-      break;
+      return false;
     case NAV:
       if (record->event.pressed) {
         layer_on(_NAV);
@@ -104,7 +165,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         layer_off(_NAV);
         update_tri_layer(_NAV, _SYM, _ADJUST);
       }
-      break;
+      return false;
     case SYM:
       if (record->event.pressed) {
         layer_on(_SYM);
@@ -113,20 +174,21 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         layer_off(_SYM);
         update_tri_layer(_NAV, _SYM, _ADJUST);
       }
-      break;
+      return false;
     case CS2:
       if (record->event.pressed) {
+        layer_move(_CS2);
       }
-      break;
+      return false;
     case CP77:
       if (record->event.pressed) {
-        PLAY_SONG(cp_song);
+        #ifdef AUDIO_ENABLE
+          PLAY_SONG(cp_song);
+        #endif
+        layer_move(_CP77);
+      } else {
       }
-       return true;
-    default:
-      return true;
-  }
+      break;
+    }
   return true;
 }
-
-
