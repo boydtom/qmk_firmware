@@ -1,11 +1,6 @@
-#include "keycodes.h"
 #include QMK_KEYBOARD_H
-#include "custom_shift_keys.h"
 #include "user_song_list.h"
 #include "muse.h"
-#include "mcuconf.h"
-#include "halconf.h"
-#include "config.h"
 
 enum planck_layers {
     _BASE,
@@ -25,10 +20,12 @@ enum planck_keycodes {
 };
 
 
+ #ifdef AUDIO_ENABLE
 float tone_startup[][2]    = SONG(STARTUP_SOUND);
 float tone_qwerty[][2]     = SONG(QWERTY_SOUND);
 float tone_goodbye[][2] = SONG(GOODBYE_SOUND);
 float cp_song[][2]    = SONG(CP2077_SOUND);
+#endif
 
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -77,12 +74,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     )
 };
 
-
-const custom_shift_key_t custom_shift_keys[] = {
-  {KC_LPRN ,  KC_RPRN}, // Shift ( is )
-  {KC_LCBR ,  KC_RCBR}, // Shift { is }
-  {KC_LBRC ,  KC_RBRC}, // Shift [ is ]
-};
 
 
 layer_state_t layer_state_set_user(layer_state_t state) {
