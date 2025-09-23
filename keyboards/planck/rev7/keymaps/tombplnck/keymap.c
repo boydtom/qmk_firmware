@@ -2,6 +2,10 @@
 #include QMK_KEYBOARD_H
 #include "custom_shift_keys.h"
 #include "user_song_list.h"
+#include "muse.h"
+#include "mcuconf.h"
+#include "halconf.h"
+#include "config.h"
 
 enum planck_layers {
     _BASE,
@@ -157,6 +161,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         #endif
       }
       return false;
+      break;
     case NAV:
       if (record->event.pressed) {
         layer_on(_NAV);
@@ -166,6 +171,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         update_tri_layer(_NAV, _SYM, _ADJUST);
       }
       return false;
+      break;
     case SYM:
       if (record->event.pressed) {
         layer_on(_SYM);
@@ -175,19 +181,21 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         update_tri_layer(_NAV, _SYM, _ADJUST);
       }
       return false;
+      break;
     case CS2:
       if (record->event.pressed) {
         layer_move(_CS2);
       }
       return false;
+      break;
     case CP77:
       if (record->event.pressed) {
         #ifdef AUDIO_ENABLE
           PLAY_SONG(cp_song);
         #endif
         layer_move(_CP77);
-      } else {
       }
+      return false;
       break;
     }
   return true;

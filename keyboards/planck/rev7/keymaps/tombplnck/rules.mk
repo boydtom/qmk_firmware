@@ -1,3 +1,5 @@
+SRC += matrix.c
+SRC += muse.c
 DEFERRED_EXEC_ENABLE = yes
 AUDIO_ENABLE = yes
 TRI_LAYER_ENABLE = yes
@@ -5,4 +7,4 @@ BOOTMAGIC_ENABLE = no
 NKRO_ENABLE = yes
 PLANCK_WATCHDOG_DISABLE = yes
 CONSOLE_ENABLE = no
-AUDIO_DRIVER = dac_additive
+AUDIO_DRIVER = dac_basic
