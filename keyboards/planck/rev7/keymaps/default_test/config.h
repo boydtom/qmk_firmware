@@ -16,23 +16,12 @@
 
 #pragma once
 
-#undef DEBOUNCE
-#define DEBOUNCE 3
-
-#undef TAPPING_TERM
-#undef PERMISSIVE_HOLD
-#define TAPPING_TERM 175
-#define PERMISSIVE_HOLD
-
 #ifdef AUDIO_ENABLE
-  #undef AUDIO_DAC_SAMPLE_WAVEFORM_SQUARE
-  #undef AUDIO_INIT_DELAY
-  #undef AUDIO_DAC_QUALITY_HIGH
-  #undef AUDIO_DAC_SAMPLE_MAX
-  #define AUDIO_DAC_SAMPLE_WAVEFORM_SQUARE
-  #define AUDIO_INIT_DELAY
-  #define AUDIO_DAC_QUALITY_HIGH
-  #define AUDIO_DAC_SAMPLE_MAX 4095U
+#    define STARTUP_SONG SONG(PLANCK_SOUND)
+// #define STARTUP_SONG SONG(NO_SOUND)
+
+#    define DEFAULT_LAYER_SONGS \
+        { SONG(QWERTY_SOUND), SONG(COLEMAK_SOUND), SONG(DVORAK_SOUND) }
 #endif
 
 /*
@@ -43,6 +32,7 @@
    - MIDI notes can be sent when in Music mode is on
 */
 
+#define MIDI_BASIC
 
 /* enable advanced MIDI features:
    - MIDI notes can be added to the keymap
