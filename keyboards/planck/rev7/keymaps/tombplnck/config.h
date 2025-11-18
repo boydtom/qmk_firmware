@@ -16,13 +16,6 @@
 
 #pragma once
 
-#undef DEBOUNCE
-#define DEBOUNCE 5
-
-#undef TAPPING_TERM
-#undef PERMISSIVE_HOLD
-#define TAPPING_TERM 175
-#define PERMISSIVE_HOLD
 #define AUDIO_INIT_DELAY
 
 /*
